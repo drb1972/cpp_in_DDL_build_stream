@@ -1,0 +1,12 @@
+<configuration>
+  <dsncollection>
+    <dsn alias="$DBALIAS" name="$LOCATION" host="$DBHOST" port="$DBPORT">
+    </dsn>
+  </dsncollection>
+  <databases>
+    <database name="$LOCATION" host="$DBHOST" port="$DBPORT">
+      <parameter name="UserID" value="$USERID"/>
+      <parameter name="Password" value="$PASSWORD"/>
+    </database>
+  </databases>
+</configuration>

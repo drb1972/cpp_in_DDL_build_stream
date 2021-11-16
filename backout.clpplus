@@ -1,0 +1,23 @@
+PROMPT ***********************************************
+PROMPT VEA Backout : VEA-zOS-Baseline-001-Structures
+PROMPT ***********************************************
+
+set echo on
+set define on
+
+SET CURRENT SQLID = '$DB2SQLID';
+SET CURRENT PATH  = CURRENT PATH,'$DB2SQLID';
+
+column c_date      new_value v_date
+column c_ldb_alias new_value v_ldb_alias
+column c_sqlid     new_value v_sqlid
+select VARCHAR_FORMAT(CURRENT TIMESTAMP, 'YYYYMMDDHH24MISS') c_date, rtrim(current server) c_ldb_alias, rtrim(current sqlid) c_sqlid from sysibm.sysdummy1;
+select '&v_ldb_alias','&v_date','&v_sqlid' from sysibm.sysdummy1;
+spool /tmp/backout-VEA-zOS-Baseline-001-Structures-CLPPLUS-&v_date-&v_ldb_alias-&v_sqlid..log
+--whenever sqlerror exit
+--whenever oserror exit
+
+STA @vea-drop-t0020.sql
+STA @vea-drop-t0010.sql
+
+QUIT

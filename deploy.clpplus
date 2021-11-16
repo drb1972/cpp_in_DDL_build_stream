@@ -1,0 +1,29 @@
+PROMPT *************************************************
+PROMPT VEA Deployment : VEA-zOS-Baseline-001-Structures
+PROMPT *************************************************
+
+set echo on
+set define on
+
+SET CURRENT SQLID = '$DB2SQLID';
+SET CURRENT PATH  = CURRENT PATH,'$DB2SQLID';
+SET CURRENT DEBUG MODE = $DB2DEBUG;
+
+column c_date      new_value v_date
+column c_ldb_alias new_value v_ldb_alias
+column c_sqlid     new_value v_sqlid
+select VARCHAR_FORMAT(CURRENT TIMESTAMP, 'YYYYMMDDHH24MISS') c_date, rtrim(current server) c_ldb_alias, rtrim(current sqlid) c_sqlid from sysibm.sysdummy1;
+select '&v_ldb_alias','&v_date','&v_sqlid' from sysibm.sysdummy1;
+spool /tmp/deploy-VEA-zOS-Baseline-001-Structures-CLPPLUS-&v_date-&v_ldb_alias-&v_sqlid..log
+whenever sqlerror exit
+whenever oserror exit
+
+--
+-- Create tables
+
+STA @Table-T0010VEA_REPORT.sql
+STA @Table-T0020VEA_REPORT_USAGE.sql 
+
+STA @grant-readonly.sql
+
+QUIT
